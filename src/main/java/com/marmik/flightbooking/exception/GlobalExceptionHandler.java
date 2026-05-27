@@ -54,11 +54,14 @@ public class GlobalExceptionHandler {
     }
 
     // 400 Bad Request — trying to cancel an already-cancelled booking
-    @ExceptionHandler(IllegalStateException.class)
-    public ResponseEntity<ErrorResponse> handleIllegalState(
-            IllegalStateException ex) {
+    @ExceptionHandler(BookingAlreadyCancelledException.class)
+    public ResponseEntity<ErrorResponse> handleAlreadyCancelled(
+            BookingAlreadyCancelledException ex) {
+        // 409 Conflict is more accurate here than 400 Bad Request —
+        // the request itself is valid, but it conflicts with the
+        // current state of the booking.
         return ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
+                .status(HttpStatus.CONFLICT)
                 .body(new ErrorResponse(ex.getMessage()));
     }
 

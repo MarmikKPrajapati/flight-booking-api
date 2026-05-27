@@ -5,6 +5,7 @@ import com.marmik.flightbooking.dto.CreateBookingRequest;
 import com.marmik.flightbooking.exception.BookingNotFoundException;
 import com.marmik.flightbooking.exception.FlightFullException;
 import com.marmik.flightbooking.exception.FlightNotFoundException;
+import com.marmik.flightbooking.exception.BookingAlreadyCancelledException;
 import com.marmik.flightbooking.model.Booking;
 import com.marmik.flightbooking.model.BookingStatus;
 import com.marmik.flightbooking.model.Flight;
@@ -68,7 +69,7 @@ public class BookingService {
 
         // Step 2: Prevent cancelling an already-cancelled booking
         if (booking.getStatus() == BookingStatus.CANCELLED) {
-            throw new IllegalStateException("Booking is already cancelled");
+            throw new BookingAlreadyCancelledException(bookingId);
         }
 
         // Step 3: Mark the booking as cancelled
